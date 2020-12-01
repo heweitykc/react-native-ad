@@ -143,7 +143,7 @@ public class RewardActivity extends Activity {
 
             // 视频播放完成后，奖励验证回调，rewardVerify：是否有效，rewardAmount：奖励数量，rewardName：奖励名称
             @Override
-            public void onRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName) {
+            public void onRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName,int code,String msg) {
                 if (rewardVerify) {
                     // TToast.show(_this, "验证:成功  数量:" + rewardAmount + " 奖励:" + rewardName, Toast.LENGTH_LONG);
                 } else {
