@@ -5,6 +5,8 @@ import startFullVideo from './FullScreenVideo';
 import startRewardVideo from './RewardVideo';
 import DrawFeed from './DrawFeed';
 import Feed from './Feed';
+import Banner from './Banner';
+
 
 const { AdManager } = NativeModules;
 
@@ -39,4 +41,5 @@ export default {
     startRewardVideo,
     DrawFeed,
     Feed,
+    Banner
 };
