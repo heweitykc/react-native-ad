@@ -8,6 +8,8 @@
 #import "SplashAd.h"
 
 @interface SplashAd () <BUSplashAdDelegate>
+@property(nonatomic, strong) UIView *adv;
+@property(nonatomic, strong) BUSplashAdView *splashView;
 
 @end
 
@@ -50,15 +52,32 @@ RCT_EXPORT_METHOD(loadSplashAd:(NSDictionary *)options resolve:(RCTPromiseResolv
     NSLog(@"Bytedance splash 开屏ios 代码位id %@", codeid);
     
     //穿山甲开屏广告
-    CGRect frame = [UIScreen mainScreen].bounds;
+    CGFloat customvw = [UIScreen mainScreen].bounds.size.width;
+    CGFloat customvh = 100;
+    CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-customvh);
     BUSplashAdView *splashView = [[BUSplashAdView alloc] initWithSlotID:codeid frame:frame]; //答妹ios测试 开屏广告位
+    _splashView = splashView;
     
     splashView.tolerateTimeout = 10;
     splashView.delegate = self; //[AdBoss getApp];
     
     [splashView loadAdData];
 
-    [[AdBoss getRootVC].view addSubview:splashView];
+    UIView *bgv = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    _adv = bgv;
+    bgv.backgroundColor = [UIColor whiteColor];
+    [bgv addSubview:splashView];
+    
+    UIView *logov =  [[UIView alloc] initWithFrame:CGRectMake(0, frame.size.height, [UIScreen mainScreen].bounds.size.width, customvh)];
+    UIImageView *logoimg = [[UIImageView alloc] initWithFrame:CGRectMake(customvw/2-30-50, (customvh-50)/2, 50, 50)];
+    logoimg.image = [UIImage imageNamed:@"logo_corner"];
+    [logov addSubview:logoimg];
+    UIImageView *titleimg = [[UIImageView alloc] initWithFrame:CGRectMake(customvw/2-10, (customvh-25)/2, 100, 25)];
+    titleimg.image = [UIImage imageNamed:@"titleimg"];
+    [logov addSubview:titleimg];
+    [bgv addSubview:logov];
+    
+    [[AdBoss getRootVC].view addSubview:bgv];
     splashView.rootViewController = [AdBoss getRootVC];
     
     resolve(@"结果：Splash Ad 成功");
@@ -66,29 +85,33 @@ RCT_EXPORT_METHOD(loadSplashAd:(NSDictionary *)options resolve:(RCTPromiseResolv
 
 //穿山甲开屏广告 回调
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
-	NSLog(@"SplashAd-onAdShow ...");
+    NSLog(@"SplashAd-onAdShow ...");
     [self sendEventWithName:@"SplashAd-onAdShow" body:@""];
 }
 
 - (void)splashAdDidClick:(BUSplashAdView *)splashAd {
-	NSLog(@"SplashAd-onAdClick ...");
+    NSLog(@"SplashAd-onAdClick ...");
     [self sendEventWithName:@"SplashAd-onAdClick" body:@"..."];
 }
 
 - (void)splashAdDidClickSkip:(BUSplashAdView *)splashAd {
-	NSLog(@"SplashAd-onAdSkip ...");
+    NSLog(@"SplashAd-onAdSkip ...");
+    [_adv removeFromSuperview];
+    _splashView = nil;
     [self sendEventWithName:@"SplashAd-onAdSkip" body:@""];
 }
 
 - (void)splashAdDidClose:(BUSplashAdView *)splashAd {
-	NSLog(@"SplashAd-onAdClose ...");
-    [splashAd removeFromSuperview];
+    NSLog(@"SplashAd-onAdClose ...");
+    [_adv removeFromSuperview];
+    _splashView = nil;
     [self sendEventWithName:@"SplashAd-onAdClose" body:@""];
 }
 
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError *)error {
-	NSLog(@"SplashAd-onAdError ...");
-    [splashAd removeFromSuperview];
+    NSLog(@"SplashAd-onAdError ...");
+    [_adv removeFromSuperview];
+    _splashView = nil;
     [self sendEventWithName:@"SplashAd-onAdError" body:@""];
 }
 
