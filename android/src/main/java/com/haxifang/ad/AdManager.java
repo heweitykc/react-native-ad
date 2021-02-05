@@ -13,10 +13,9 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.UiThreadUtil;
 
 import java.util.List;
-
-import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
 
 public class AdManager extends ReactContextBaseJavaModule {
     public static ReactApplicationContext reactAppContext;
@@ -36,9 +35,16 @@ public class AdManager extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void init(ReadableMap options) {
+
+        UiThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AdBoss.init(reactAppContext, AdBoss.tt_appid);
+            }
+        });
+
         //默认头条穿山甲
         AdBoss.tt_appid = options.hasKey("appid") ? options.getString("appid") : AdBoss.tt_appid;
-        AdBoss.init(reactAppContext, AdBoss.tt_appid);
 
         //支持传参头条需要的userId和appName ...
         if (options.hasKey("uid")) {

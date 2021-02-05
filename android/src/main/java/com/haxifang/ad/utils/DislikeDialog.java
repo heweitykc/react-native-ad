@@ -82,8 +82,13 @@ public class DislikeDialog extends TTDislikeDialogAbstract {
     }
 
     @Override
-    public int[] getTTDislikeListViewIds() {
+    public int[] getTTDislikeListViewIds(){
         return new int[]{R.id.lv_dislike_custom};
+    }
+
+    @Override
+    public int[] getPersonalizationPromptIds(){
+        return null;
     }
 
     @Override
