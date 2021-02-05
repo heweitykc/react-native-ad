@@ -34,15 +34,7 @@ public class AdManager extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void init(ReadableMap options) {
-
-        UiThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AdBoss.init(reactAppContext, AdBoss.tt_appid);
-            }
-        });
-
+    public void init(ReadableMap options, final Promise promise) {
         //默认头条穿山甲
         AdBoss.tt_appid = options.hasKey("appid") ? options.getString("appid") : AdBoss.tt_appid;
 
@@ -82,6 +74,16 @@ public class AdManager extends ReactContextBaseJavaModule {
         AdBoss.codeid_full_video = options.hasKey("codeid_full_video") ? options.getString("codeid_full_video") : AdBoss.codeid_full_video;
         AdBoss.codeid_reward_video = options.hasKey("codeid_reward_video") ? options.getString("codeid_reward_video") : AdBoss.codeid_reward_video;
         AdBoss.codeid_reward_video_tencent = options.hasKey("codeid_reward_video_tencent") ? options.getString("codeid_reward_video_tencent") : AdBoss.codeid_reward_video_tencent;
+
+        AdBoss.initPromise = promise;
+
+        UiThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AdBoss.init(reactAppContext, AdBoss.tt_appid);
+                AdBoss.initPromise.resolve(true);
+            }
+        });
     }
 
     /**

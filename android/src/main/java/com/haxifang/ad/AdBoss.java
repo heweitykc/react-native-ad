@@ -61,6 +61,9 @@ public class AdBoss {
     public static int splashAd_anim_in = 0;
     public static int splashAd_anim_out = 0;
 
+    //初始化回调
+    public static Promise initPromise;
+
     /**
      * 准备新的激励(全屏)视频回调
      *
