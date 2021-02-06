@@ -20,7 +20,7 @@ type appInfo = {
 
 export const init = (appInfo) => {
     //FIXME: init 传入一些codeid可以提前加载广告，比如视频类
-    AdManager.init(appInfo);
+    return AdManager.init(appInfo);
 };
 
 type feedInfo = {
