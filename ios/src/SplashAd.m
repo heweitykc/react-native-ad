@@ -78,6 +78,7 @@ RCT_EXPORT_METHOD(loadSplashAd:(NSDictionary *)options resolve:(RCTPromiseResolv
     [bgv addSubview:logov];
     
     splashView.rootViewController = [AdBoss getRootVC];
+    [[AdBoss getRootVC].view addSubview:_adv];
     
     resolve(@"结果：Splash Ad 成功");
 }
@@ -85,7 +86,6 @@ RCT_EXPORT_METHOD(loadSplashAd:(NSDictionary *)options resolve:(RCTPromiseResolv
 //穿山甲开屏广告 回调
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
     NSLog(@"SplashAd-onAdShow ...");
-    [[AdBoss getRootVC].view addSubview:_adv];
     [self sendEventWithName:@"SplashAd-onAdShow" body:@""];
 }
 
@@ -116,9 +116,9 @@ RCT_EXPORT_METHOD(loadSplashAd:(NSDictionary *)options resolve:(RCTPromiseResolv
 
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError *)error {
     NSLog(@"SplashAd-onAdError ...");
+    [self sendEventWithName:@"SplashAd-onAdError" body:@""];
     [_adv removeFromSuperview];
     _splashView = nil;
-    [self sendEventWithName:@"SplashAd-onAdError" body:@""];
 }
 
 @end
