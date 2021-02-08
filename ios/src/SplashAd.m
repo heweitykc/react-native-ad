@@ -117,8 +117,12 @@ RCT_EXPORT_METHOD(loadSplashAd:(NSDictionary *)options resolve:(RCTPromiseResolv
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError *)error {
     NSLog(@"SplashAd-onAdError ...");
     [self sendEventWithName:@"SplashAd-onAdError" body:@""];
-    [_adv removeFromSuperview];
-    _splashView = nil;
+    [UIView animateWithDuration:0.25 animations:^{
+        self->_adv.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self->_adv removeFromSuperview];
+        self->_splashView = nil;
+    }];
 }
 
 @end
