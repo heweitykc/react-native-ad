@@ -13,6 +13,7 @@ import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.WritableMap;
 import com.haxifang.R;
 import com.haxifang.ad.AdBoss;
@@ -197,8 +198,12 @@ public class RewardActivity extends Activity {
             }
         });
 
-        // 开始显示广告,会铺满全屏...
-        ad.showRewardVideoAd(_this);
+        UiThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ad.showRewardVideoAd(_this);
+            }
+        });
     }
 
 
